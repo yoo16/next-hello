@@ -3,8 +3,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title: "Next Todo",
-  description: "This is Next Todo App",
+  title: "Next Samples",
+  description: "This is Next samples",
 };
 
 export default function RootLayout({
