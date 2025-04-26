@@ -2,19 +2,30 @@
 
 import { FormEvent, useState } from "react";
 
-type Todo = { id: number; text: string; done: boolean };
+interface Todo {
+    id: number;
+    text: string;
+    done: boolean;
+};
 
 export default function TodoList() {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [text, setText] = useState("");
 
     const addTodo = (e: FormEvent) => {
+        // イベントをこれ以上うけつけない
         e.preventDefault();
+        // 入力テキストをトリムして空欄だったら終了
         if (!text.trim()) return;
-        setTodos((prev) => [
-            ...prev,
-            { id: Date.now(), text: text.trim(), done: false },
-        ]);
+        // 新しいTODO
+        const newTodo: Todo = { 
+            id: Date.now(), 
+            text: text.trim(), 
+            done: false 
+        };
+        // TODOにデータを追加
+        setTodos((prev) => [...prev, newTodo]);
+        // 入力テキストを削除
         setText("");
     };
 
