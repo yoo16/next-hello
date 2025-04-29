@@ -7,11 +7,15 @@ export default function Counter() {
 
     // ➕ 増加ハンドラー
     const handleIncrement = () => {
+        // const current = count + 1
+        // setCount(current);
         setCount((prev) => prev + 1);
     };
 
     // ➖ 減少ハンドラー
     const handleDecrement = () => {
+        // const current = count - 1
+        // setCount(current);
         setCount((prev) => prev - 1);
     };
 
@@ -20,29 +24,22 @@ export default function Counter() {
         setCount(0);
     };
 
-
     return (
-        <section className="bg-white shadow rounded-2xl p-6 w-80 text-center space-y-4">
-            <p className="text-xl font-semibold">{count}</p>
+        <section className="mt-4 bg-white shadow rounded-2xl p-6 w-80 text-center space-y-4">
+            <p className="p-6 text-3xl font-semibold">{count}</p>
             <div className="flex justify-center gap-4">
                 <button
                     onClick={handleDecrement}
                     className="bg-sky-500 text-white px-4 py-2 rounded-xl"
-                >
-                    -1
-                </button>
+                >-1</button>
                 <button
                     onClick={handleReset}
                     className="bg-sky-500 text-white px-4 py-2 rounded-xl"
-                >
-                    Reset
-                </button>
+                >Reset</button>
                 <button
                     onClick={handleIncrement}
                     className="bg-sky-500 text-white px-4 py-2 rounded-xl"
-                >
-                    +1
-                </button>
+                >+1</button>
             </div>
         </section>
     );
