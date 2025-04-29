@@ -1,12 +1,9 @@
-import Counter from "@/app/components/Counter";
+import React from 'react'
 
-const page = () => {
-    return (
-        <div>
-            <h1 className="text-3xl p-4 font-bold text-center">Counter</h1>
-            <Counter />
-        </div>
-    );
+export default function page() {
+  return (
+    <div>
+        <h1 className="text-3xl font-bold text-center">Counter</h1>
+    </div>
+  )
 }
-
-export default page;
