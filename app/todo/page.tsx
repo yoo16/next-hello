@@ -5,7 +5,7 @@ import TodoList from '../components/TodoList';
 import TodoForm from '../components/TodoForm';
 import { Todo } from "@/interfaces/Todo";
 
-export default function Page() {
+export default function TodoPage() {
     const [todos, setTodos] = useState<Todo[]>([]);
 
     //TODO追加
