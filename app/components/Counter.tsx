@@ -7,16 +7,14 @@ export default function Counter() {
 
     // ➕ 増加ハンドラー
     const handleIncrement = () => {
-        // const current = count + 1
-        // setCount(current);
-        setCount((prev) => prev + 1);
+        // setCount((prev) => prev + 1);
+        setCount(count + 1);
     };
 
     // ➖ 減少ハンドラー
     const handleDecrement = () => {
-        // const current = count - 1
-        // setCount(current);
-        setCount((prev) => prev - 1);
+        // setCount((prev) => prev - 1);
+        setCount(count - 1);
     };
 
     // ➖ リセットハンドラー
