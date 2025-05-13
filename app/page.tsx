@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link";
+import PostTest from "./components/PostTest";
 
 export default function Home() {
 
@@ -17,6 +18,9 @@ export default function Home() {
           className="px-6 py-3 bg-sky-600 text-white rounded-xl shadow hover:bg-sky-700 transition">
             はじめる
         </Link>
+      </div>
+      <div>
+        <PostTest />
       </div>
     </div>
   );
