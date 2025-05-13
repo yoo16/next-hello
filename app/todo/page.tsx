@@ -8,6 +8,7 @@ export default function TodoPage() {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [text, setText] = useState("");
 
+    // 初回レンダリング時にTODOリストを取得
     useEffect(() => {
         const load = async () => {
             const data = await fetchTodos();
@@ -42,7 +43,6 @@ export default function TodoPage() {
         );
     };
 
-    // JSX（変わらず）
     return (
         <div className="rounded-2xl p-6 w-1/2 mx-auto bg-white">
             <h2 className="text-center text-2xl font-semibold mb-4">To‑Do</h2>

@@ -4,9 +4,9 @@ import { join } from "path";
 import { existsSync } from "fs";
 import { initTodo } from "@/app/services/todoService";
 
-export const runtime = "nodejs"; // Node.js runtimeを使用
-
+// dataディレクトリのパス
 const DATA_DIR = join(process.cwd(), "data");
+// todos.jsonのパス
 const FILE_PATH = join(DATA_DIR, "todos.json");
 
 export async function POST(req: Request) {
@@ -15,6 +15,7 @@ export async function POST(req: Request) {
         const body = await req.json();
 
         if (!body || !body.text) {
+            // リクエストボディが不正な場合
             return NextResponse.json({ error: "Invalid TODO data" }, { status: 400 });
         }
 
