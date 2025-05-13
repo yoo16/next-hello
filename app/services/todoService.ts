@@ -1,7 +1,10 @@
 import { Todo } from "@/interfaces/Todo";
 
-const API_BASE = "/api/todo";
-
+/**
+ * TODOの初期化関数
+ * @param text 
+ * @returns Todo
+ */
 export function initTodo(text: string): Todo {
     return {
         id: Date.now(),
@@ -10,14 +13,24 @@ export function initTodo(text: string): Todo {
     };
 }
 
+/**
+ * TODOリスト取得APIにGETする関数
+ * @returns Todo[] | []
+ */
 export async function fetchTodos(): Promise<Todo[]> {
-    const res = await fetch(`${API_BASE}/list`);
+    const res = await fetch('/api/todo/list');
     const data = await res.json();
     return data.todos || [];
 }
 
+/**
+ * TODO追加APIにPOSTする関数
+ * /api/todo/add
+ * @param text 
+ * @returns Todo | null
+ */
 export async function addTodo(text: string): Promise<Todo | null> {
-    const res = await fetch(`${API_BASE}/add`, {
+    const res = await fetch('/api/todo/add', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
@@ -32,12 +45,17 @@ export async function addTodo(text: string): Promise<Todo | null> {
     return data.todo;
 }
 
+/**
+ * TODO削除APIにPOSTする関数
+ * /api/todo/remove
+ * @param id 
+ * @returns boolean
+ */
 export async function removeTodo(id: number): Promise<boolean> {
-    const res = await fetch(`${API_BASE}/remove`, {
+    const res = await fetch('/api/todo/remove', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
     });
-
     return res.ok;
 }
