@@ -11,15 +11,12 @@ export default function Header() {
 
                 {/* メニューリンク */}
                 <nav className="flex gap-4 text-sm font-medium">
-                    <Link href="/" className="hover:underline">
-                        Home
-                    </Link>
-                    <Link href="/counter" className="hover:underline">
-                        Counter
-                    </Link>
-                    <Link href="/todo" className="hover:underline">
-                        To‑Do
-                    </Link>
+                    <nav className="space-x-4">
+                        <Link href="/" className="text-white hover:underline">Home</Link>
+                        <Link href="/counter" className="text-white hover:underline">Counter</Link>
+                        <Link href="/profile" className="text-white hover:underline">Profile</Link>
+                        <Link href="/todo" className="text-white hover:underline">To-Do</Link>
+                    </nav>
                 </nav>
             </div>
         </header>
