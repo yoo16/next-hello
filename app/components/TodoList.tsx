@@ -32,7 +32,7 @@ export default function TodoList({ todos, toggleHandler, removeHandler }: props)
                     </li>
                 ))}
                 {todos.length === 0 && (
-                    <li className="text-center text-gray-400">No tasks yet 🎉</li>
+                    <li className="text-center text-gray-400">タスクがありません</li>
                 )}
             </ul>
         </div>

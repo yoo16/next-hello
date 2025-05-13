@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { Todo } from "@/interfaces/Todo";
-import { initTodo, fetchTodos, addTodo, removeTodo } from "@/app/services/todoService";
+import { initTodo, fetchTodos, addTodo, removeTodo, toggleTodo } from "@/app/services/todoService";
 
 export default function TodoPage() {
     const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,30 +17,57 @@ export default function TodoPage() {
         load();
     }, []);
 
+    /**
+     * Todoを追加する関数
+     * @param e 
+     * @returns 
+     */
     const add = async (e: FormEvent) => {
         e.preventDefault();
         if (!text.trim()) return;
 
-        const todo:Todo = initTodo(text);
+        // 新規Todoを作成
+        const todo: Todo = initTodo(text);
+        // Todoをローカルの状態に追加
         setTodos((prev) => [...prev, todo]);
+        // textを空にする
         setText("");
 
+        // 追加したTODOをAPIに保存
         const saved = await addTodo(todo.text);
         if (!saved) console.error("保存に失敗しました");
     };
 
+    /**
+     * Todoを削除する関数
+     * @param id 
+     */
     const remove = async (id: number) => {
         setTodos((prev) => prev.filter((todo) => todo.id !== id));
+
+        // 削除したTODOをAPIに保存
         const ok = await removeTodo(id);
         if (!ok) console.error("削除に失敗しました");
     };
 
-    const toggle = (id: number) => {
+    /**
+     * Todoの完了状態を切り替える関数
+     * @param id 
+     */
+    const toggle = async (id: number) => {
+        // ローカルの状態を先に変更（楽観的更新）
         setTodos((prev) =>
             prev.map((todo) =>
                 todo.id === id ? { ...todo, done: !todo.done } : todo
             )
         );
+
+        // Todoの完了状態をAPIに保存
+        const ok = await toggleTodo(id);
+        if (!ok) {
+            console.error("状態更新に失敗しました");
+            // 必要ならロールバック処理も追加可能
+        }
     };
 
     return (
@@ -73,7 +100,7 @@ export default function TodoPage() {
                         </li>
                     ))}
                     {todos.length === 0 && (
-                        <li className="text-center text-gray-400">No tasks yet 🎉</li>
+                        <li className="text-center text-gray-400">タスクがありません</li>
                     )}
                 </ul>
             </section>

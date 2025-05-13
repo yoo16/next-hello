@@ -59,3 +59,17 @@ export async function removeTodo(id: number): Promise<boolean> {
     });
     return res.ok;
 }
+
+/**
+ * Todo完了APIにPOSTする関数
+ * @param id 
+ * @returns boolean
+ */
+export async function toggleTodo(id: number): Promise<boolean> {
+    const res = await fetch("/api/todo/toggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+    });
+    return res.ok;
+}
