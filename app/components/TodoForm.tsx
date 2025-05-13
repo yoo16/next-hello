@@ -26,7 +26,7 @@ export default function TodoForm({ addTodo }: props) {
         console.log(newTodo);
 
         // 入力テキストをトリムして空欄だったら終了
-        // addTodo(newTodo)
+        addTodo(newTodo)
 
         // 入力テキストを削除
         setText("");
