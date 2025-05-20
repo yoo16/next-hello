@@ -3,8 +3,6 @@ import { writeFile, readFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import { join } from "path";
 
-export const runtime = "nodejs"; // Edgeではfs使えない
-
 const DATA_DIR = join(process.cwd(), "data");
 const FILE_PATH = join(DATA_DIR, "memos.json");
 
