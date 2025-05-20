@@ -1,14 +1,24 @@
 "use client";
 
 // reactの useState, FormEvent をインポート
-import { useState, FormEvent } from "react";
-import { addMemo } from "../services/memoService";
+import { useState, FormEvent, useEffect } from "react";
+import { addMemo } from "@/app/services/MemoService";
 
 export default function MemoList() {
     // textの値を管理するステート変数
     const [text, setText] = useState("");
     // memosの値を管理するステート変数
     const [memos, setMemos] = useState<string[]>([]);
+    // messageの値を管理するステート変数
+    const [message, setMessage] = useState<string>("");
+
+    useEffect(() => {
+        if (!message) return;
+        // メッセージ自動非表示処理（3秒後）
+        const timer = setTimeout(() => setMessage(""), 3000);
+        // クリーンアップ
+        return () => clearTimeout(timer);
+    }, [message]);
 
     // textの変更を監視するイベントハンドラ
     const handleTextChange = (e: FormEvent<HTMLInputElement>) => {
@@ -21,19 +31,26 @@ export default function MemoList() {
         e.preventDefault();
         if (!text.trim()) return;
 
-        // サーバにメモを追加するリクエストを送信
-        const ok = await addMemo(text.trim());
-        if (ok) {
-            // クライアント側のメモリストに追加
-            setMemos((prev) => [...prev, text.trim()]);
-            setText("");
-        } else {
-            console.error("メモの保存に失敗しました");
-        }
+        // クライアント側のメモリストに追加
+        setMemos([...memos, text.trim()])
+        setText("");
+
+        // APIサーバにメモを送信
+        const result = await addMemo(text.trim());
+        console.log(result);
+
+        setMessage(result.message);
     };
 
     return (
         <section className="mx-auto p-6 rounded shadow">
+            <div>
+                {message && (
+                    <div className="bg-green-100 text-green-700 p-4 rounded mb-4">
+                        {message}
+                    </div>
+                )}
+            </div>
             <div className="flex gap-2 mb-4">
                 <input
                     type="text"
