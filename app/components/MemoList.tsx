@@ -2,7 +2,7 @@
 
 // reactの useState, FormEvent をインポート
 import { useState, FormEvent, useEffect } from "react";
-import { addMemo } from "@/app/services/MemoService";
+import { addMemo, loadMemos } from "@/app/services/MemoService";
 
 export default function MemoList() {
     // textの値を管理するステート変数
@@ -12,8 +12,17 @@ export default function MemoList() {
     // messageの値を管理するステート変数
     const [message, setMessage] = useState<string>("");
 
+    // コンポーネントのマウント時にメモをロードする
     useEffect(() => {
-        if (!message) return;
+        const fetchMemos = async () => {
+            const result = await loadMemos();
+            setMessage(result?.message);
+            setMemos(result?.memos);
+        }
+        fetchMemos();
+    }, []);
+
+    useEffect(() => {
         // メッセージ自動非表示処理（3秒後）
         const timer = setTimeout(() => setMessage(""), 3000);
         // クリーンアップ

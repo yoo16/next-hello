@@ -28,7 +28,8 @@ export async function addMemo(text: string): Promise<void> {
     if (!text) return;
     const memos = await getAllMemos();
     memos.push(text);
-    await writeFile(FILE_PATH, JSON.stringify(memos, null, 2), "utf8");
+    const json = JSON.stringify(memos, null, 2);
+    await writeFile(FILE_PATH, json, "utf8");
 }
 
 // メモ削除（index指定）
@@ -36,10 +37,12 @@ export async function removeMemo(index: number): Promise<void> {
     const memos = await getAllMemos();
     if (index < 0 || index >= memos.length) return;
     memos.splice(index, 1);
-    await writeFile(FILE_PATH, JSON.stringify(memos, null, 2), "utf8");
+    const json = JSON.stringify(memos, null, 2);
+    await writeFile(FILE_PATH, json, "utf8");
 }
 
 // 全削除
 export async function clearMemos(): Promise<void> {
-    await writeFile(FILE_PATH, JSON.stringify([], null, 2), "utf8");
+    const json = await JSON.stringify([], null, 2);
+    await writeFile(FILE_PATH, json, "utf8");
 }
