@@ -2,7 +2,7 @@
 
 // reactの useState, FormEvent をインポート
 import { useState, FormEvent, useEffect } from "react";
-import { addMemo, loadMemos } from "@/app/services/MemoService";
+import { addMemo, loadMemos, removeMemo } from "@/app/services/MemoService";
 
 export default function MemoList() {
     // textの値を管理するステート変数
@@ -51,6 +51,17 @@ export default function MemoList() {
         setMessage(result.message);
     };
 
+    const handleRemove = async (index: number) => {
+        if (confirm("メモを削除しますか？")) {
+            // クライアント側のメモリストから削除
+            setMemos(memos.filter((_, i) => i !== index));
+            // APIサーバにメモ index を送信
+            const result = await removeMemo(index);
+            // console.log(result);
+            setMessage(result.message);
+        }
+    };
+
     return (
         <section className="mx-auto p-6 rounded shadow">
             <div>
@@ -70,7 +81,8 @@ export default function MemoList() {
                 />
                 <button
                     onClick={handleAdd}
-                    className="bg-blue-600 text-white px-4 py-2 rounded">
+                    disabled={!text}
+                    className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed">
                     追加
                 </button>
             </div>
@@ -83,7 +95,13 @@ export default function MemoList() {
                     <li
                         key={key}
                         className="border-b pb-1 border-gray-300 text-gray-800">
-                        {memo}
+                        {/* 削除ボタン追加 */}
+                        <button
+                            onClick={() => handleRemove(key)}
+                            className="text-xs text-white bg-red-400 px-2 py-1 mr-2 rounded ml-2 cursor-pointer">
+                            ×
+                        </button>
+                        <span>{memo}</span>
                     </li>
                 ))}
             </ul>

@@ -36,11 +36,11 @@ export async function loadMemos(){
  * @description メモを削除するAPIを呼び出す
  * @returns 
  */
-export async function removeMemo(text: string) {
+export async function removeMemo(index: number) {
     const res = await fetch("/api/memo/remove", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ index }),
     });
     const result = await res.json();
     if (res.ok) {
