@@ -1,14 +1,14 @@
 'use client';
 
 import { Message } from '@/app/interfaces/Message';
-import { roleConfig } from '@/app/constants/roles';
+import { roleConfig, ROLE_USER } from '@/app/constants/roles';
 
 interface Props {
     message: Message;
 }
 
 export default function MessageItem({ message }: Props) {
-    const role = message.role || 'bot';
+    const role = message.role ?? ROLE_USER; // デフォルトはユーザー
     const { label, bubbleClass, tagClass } = roleConfig[role];
 
     return (
