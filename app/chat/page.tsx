@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Message } from '@/app/interfaces/Message';
-import { sendMessageToAPI } from '@/app/services/ChatService';
 import MessageItem from '@/app/components/MessageItem';
 import { ROLE_USER } from '@/app/constants/roles';
+import { sendMessageToAPI } from '@/app/services/ChatService';
 
 export default function Home() {
     const [messages, setMessages] = useState<Message[]>([]);
