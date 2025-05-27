@@ -1,6 +1,6 @@
 "use client";
 
-import { Todo } from "@/interfaces/Todo";
+import { Todo } from "@/app/interfaces/Todo";
 import { FormEvent, useState } from "react";
 
 interface props {

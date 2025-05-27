@@ -1,6 +1,6 @@
 "use client";
 
-import { Todo } from "@/interfaces/Todo";
+import { Todo } from "@/app/interfaces/Todo";
 interface props {
     todos: Todo[];
     toggleHandler: (id: number) => void;

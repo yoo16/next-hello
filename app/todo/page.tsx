@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { Todo } from "@/interfaces/Todo";
+import { Todo } from "@/app/interfaces/Todo";
 import { initTodo, fetchTodos, addTodo, removeTodo, toggleTodo } from "@/app/services/todoService";
 
 export default function TodoPage() {

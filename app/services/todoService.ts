@@ -1,4 +1,4 @@
-import { Todo } from "@/interfaces/Todo";
+import { Todo } from "@/app/interfaces/Todo";
 
 /**
  * TODOの初期化関数

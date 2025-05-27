@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
-import { Todo } from "@/interfaces/Todo";
+import { Todo } from "@/app/interfaces/Todo";
 
 export const runtime = "nodejs"; // ファイル操作のため
 
