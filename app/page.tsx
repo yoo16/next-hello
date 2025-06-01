@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import PostTest from "./components/PostTest";
+import AIBot from "@/app/components/AIBot";
 
 export default function Home() {
 
@@ -20,7 +20,7 @@ export default function Home() {
         </Link>
       </div>
       <div>
-        <PostTest />
+        <AIBot />
       </div>
     </div>
   );
