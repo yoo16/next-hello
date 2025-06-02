@@ -1,8 +1,6 @@
 "use client"
 
 import React, { useState } from 'react'
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import Loading from '@/app/components/Loading';
 
 export default function AIBot() {
@@ -21,9 +19,7 @@ export default function AIBot() {
         <div>
             <h2 className="text-2xl font-bold">教えて！Gemini!</h2>
             <div className="text-left p-4">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {message}
-                </ReactMarkdown>
+                {message}
             </div>
             <button
                 onClick={getMessage}

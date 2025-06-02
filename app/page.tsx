@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import AIBot from "@/app/components/AIBot";
+import ImageUploadForm from "@/app/components/ImageUploadForm";
 
 export default function Home() {
 
@@ -16,12 +17,13 @@ export default function Home() {
       <div className="space-x-4">
         <Link href="counter/"
           className="px-6 py-3 bg-sky-600 text-white rounded-xl shadow hover:bg-sky-700 transition">
-            はじめる
+          はじめる
         </Link>
       </div>
-      <div>
-        <AIBot />
-      </div>
+
+      <AIBot />
+
+      <ImageUploadForm />
     </div>
   );
 }

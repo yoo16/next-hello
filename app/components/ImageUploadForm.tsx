@@ -1,0 +1,105 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import Loading from '@/app/components/Loading';
+import Image from 'next/image';
+
+export default function ImageUploadForm() {
+    const [file, setFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [result, setResult] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files?.[0] || null;
+        setFile(selectedFile);
+
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result as string);
+            };
+            reader.readAsDataURL(selectedFile);
+        } else {
+            setPreviewUrl(null);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!file) {
+            alert('画像を選択してください。');
+            return;
+        }
+
+        setIsLoading(true);
+        setResult('');
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const response = await fetch('/api/whats_image', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            setResult(data.message);
+        } else {
+            setResult('エラーが発生しました。');
+        }
+
+        setIsLoading(false);
+    };
+
+    return (
+        <div className="space-y-4">
+            <h2 className="text-2xl font-bold">画像を教えて！</h2>
+
+            {result && (
+                <div className="mt-4 p-3 bg-gray-100 rounded shadow text-sm whitespace-pre-wrap">
+                    <div>{result}</div>
+                </div>
+            )}
+
+            <input type="file" accept="image/*" className="hidden"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+            />
+
+            {/* 画像を選択ボタン */}
+            <button
+                type="button"
+                className="px-4 py-2 bg-gray-300 text-black rounded shadow hover:bg-gray-400"
+                onClick={() => fileInputRef.current?.click()}
+            >
+                画像を選択
+            </button>
+
+            {previewUrl && (
+                <div className="flex flex-col items-center justify-center p-2 text-center">
+                    <Image
+                        src={previewUrl}
+                        alt="Preview"
+                        width={300}
+                        height={300}
+                        unoptimized
+                        className="rounded shadow mt-1"
+                    />
+                    <button
+                        onClick={handleSubmit}
+                        className="mt-4 px-6 py-3 bg-sky-600 text-white rounded-xl shadow hover:bg-sky-700 cursor-pointer"
+                        disabled={!file || isLoading}
+                    >
+                        画像を送信
+                    </button>
+                </div>
+            )}
+
+            {isLoading && <Loading />}
+        </div>
+    );
+}
