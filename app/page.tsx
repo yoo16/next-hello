@@ -3,6 +3,7 @@
 import Link from "next/link";
 import AIBot from "@/app/components/AIBot";
 import ImageUploadForm from "@/app/components/ImageUploadForm";
+import ImageGenerateForm from "./components/ImageGenerateForm";
 
 export default function Home() {
 
@@ -24,6 +25,8 @@ export default function Home() {
       <AIBot />
 
       <ImageUploadForm />
+
+      <ImageGenerateForm />
     </div>
   );
 }

@@ -4,9 +4,9 @@ import { useState } from 'react';
 import Loading from '@/app/components/Loading';
 import Image from 'next/image';
 
-export default function ImageForm() {
+export default function ImageGenerateForm() {
     const [text, setText] = useState<string>("");
-    const [result, setResult] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState("");
 
@@ -20,11 +20,14 @@ export default function ImageForm() {
         if (!text) return;
 
         setIsLoading(true);
-        setResult('');
+        setMessage('');
 
         const response = await fetch('/api/generate_image', {
             method: 'POST',
-            body: text,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text }),
         });
         // レスポンスを取得
         const data = await response.json();
@@ -33,22 +36,19 @@ export default function ImageForm() {
             setPreviewUrl(data.url);
         }
         // 結果を設定
-        setResult(data.message);
+        setMessage(data.message);
 
         setIsLoading(false);
     };
 
     return (
-        <div className="space-y-4">
+        <div className="mx-auto max-w-2xl p-6 bg-white rounded-lg shadow-md space-y-4">
             <h2 className="text-2xl font-bold">画像を教えて！</h2>
 
-            {result && (
-                <div className="mt-4 p-3 bg-gray-100 rounded shadow text-sm whitespace-pre-wrap">
-                    <div>{result}</div>
-                </div>
-            )}
-
-            <input type="text" className="p-2 border rounded w-full" onChange={handleChange} />
+            <input type="text" className="p-2 border border-gray-300 rounded w-full"
+                onChange={handleChange}
+                placeholder="生成したい画像の説明を入力してください"
+            />
             <button
                 onClick={handleSubmit}
                 className="mt-4 px-6 py-3 bg-sky-600 text-white rounded-xl shadow hover:bg-sky-700 cursor-pointer"
@@ -67,6 +67,12 @@ export default function ImageForm() {
                         unoptimized
                         className="rounded shadow mt-1"
                     />
+                </div>
+            )}
+
+            {message && (
+                <div className="mt-4 p-3 bg-gray-100 rounded shadow text-sm whitespace-pre-wrap">
+                    <div>{message}</div>
                 </div>
             )}
 

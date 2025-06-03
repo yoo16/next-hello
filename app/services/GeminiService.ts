@@ -10,13 +10,6 @@ import { Message } from '@/app/interfaces/Message';
 
 const API_KEY = process.env.GEMINI_API_KEY;
 
-const config = {
-    temperature: 1,
-    topP: 0.95,
-    topK: 64,
-    maxOutputTokens: 1024,
-};
-
 const DATA_DIR = join(process.cwd(), "public/images");
 
 // データファイルの準備
@@ -31,6 +24,13 @@ export async function sendToGemini(userMessage: Message): Promise<Message> {
 
     // GoogleGenAIインスタンス生成
     const ai = new GoogleGenAI({ apiKey: API_KEY });
+    const config = {
+        temperature: 1,
+        topP: 0.95,
+        topK: 64,
+        maxOutputTokens: 1024,
+    };
+
     // コンテンツの設定
     const contents = [
         {
@@ -71,6 +71,13 @@ export async function whatsImage(imageFile: File): Promise<string> {
     const prompt = "添付した画像について説明して。";
     // GoogleGenAIインスタンス生成
     const ai = new GoogleGenAI({ apiKey: API_KEY });
+    const config = {
+        temperature: 1,
+        topP: 0.95,
+        topK: 64,
+        maxOutputTokens: 1024,
+    };
+
     // コンテンツの設定
     const contents = [
         {
@@ -92,13 +99,17 @@ export async function whatsImage(imageFile: File): Promise<string> {
         config,
         contents
     });
+    console.log(response.candidates?.[0]?.content?.parts);
     // レスポンスからテキストデータを取得
-    const text = response.candidates?.[0]?.content?.parts?.[1]?.text || 'No response';
+    const text = response.candidates?.[0]?.content?.parts?.[0]?.text || 'No response';
     return text;
 }
 
 export async function generateImage(prompt: string): Promise<string> {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
+    const config = {
+        responseMimeType: 'image/jpeg', // または 'image/png'
+    };
     // コンテンツの設定
     const contents = [
         {
@@ -112,7 +123,7 @@ export async function generateImage(prompt: string): Promise<string> {
     ]
     // GeminiAPIにリクエストを送信
     const response = await ai.models.generateContentStream({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.0-flash-preview-image-generation",
         config,
         contents
     });
@@ -120,8 +131,8 @@ export async function generateImage(prompt: string): Promise<string> {
     // ディレクトリチェック
     ensureFile();
     // TODO: ファイル名をUUIDで生成
-    const fileExtension = "jpg";
-    const fileName = new Date() + "." + fileExtension;
+    const fileExtension = ".jpg";
+    const fileName = new Date() + fileExtension;
     const filePath = join(DATA_DIR, fileName);
     const url = `/images/${fileName}`;
 

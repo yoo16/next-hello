@@ -7,7 +7,7 @@ import Image from 'next/image';
 export default function ImageUploadForm() {
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const [result, setResult] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,7 +32,7 @@ export default function ImageUploadForm() {
         if (!file) return;
 
         setIsLoading(true);
-        setResult('');
+        setMessage('');
 
         // formDataを作成して画像を追加
         const formData = new FormData();
@@ -46,20 +46,14 @@ export default function ImageUploadForm() {
         // レスポンスを取得
         const data = await response.json();
         // 結果を設定
-        setResult(data.message);
+        setMessage(data.message);
 
         setIsLoading(false);
     };
 
     return (
-        <div className="space-y-4">
+        <div className="mx-auto max-w-2xl p-6 bg-white rounded-lg shadow-md space-y-4">
             <h2 className="text-2xl font-bold">画像を教えて！</h2>
-
-            {result && (
-                <div className="mt-4 p-3 bg-gray-100 rounded shadow text-sm whitespace-pre-wrap">
-                    <div>{result}</div>
-                </div>
-            )}
 
             <input type="file" accept="image/*" className="hidden"
                 onChange={handleFileChange}
@@ -92,6 +86,12 @@ export default function ImageUploadForm() {
                     >
                         画像を送信
                     </button>
+                </div>
+            )}
+
+            {message && (
+                <div className="text-left p-3 bg-gray-100 rounded shadow text-sm whitespace-pre-wrap">
+                    <div>{message}</div>
                 </div>
             )}
 
