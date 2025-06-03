@@ -1,0 +1,76 @@
+'use client';
+
+import { useState } from 'react';
+import Loading from '@/app/components/Loading';
+import Image from 'next/image';
+
+export default function ImageForm() {
+    const [text, setText] = useState<string>("");
+    const [result, setResult] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState("");
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setText(e.target.value);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!text) return;
+
+        setIsLoading(true);
+        setResult('');
+
+        const response = await fetch('/api/generate_image', {
+            method: 'POST',
+            body: text,
+        });
+        // レスポンスを取得
+        const data = await response.json();
+        // 画像のURLがあればプレビュー用に設定
+        if (data.url) {
+            setPreviewUrl(data.url);
+        }
+        // 結果を設定
+        setResult(data.message);
+
+        setIsLoading(false);
+    };
+
+    return (
+        <div className="space-y-4">
+            <h2 className="text-2xl font-bold">画像を教えて！</h2>
+
+            {result && (
+                <div className="mt-4 p-3 bg-gray-100 rounded shadow text-sm whitespace-pre-wrap">
+                    <div>{result}</div>
+                </div>
+            )}
+
+            <input type="text" className="p-2 border rounded w-full" onChange={handleChange} />
+            <button
+                onClick={handleSubmit}
+                className="mt-4 px-6 py-3 bg-sky-600 text-white rounded-xl shadow hover:bg-sky-700 cursor-pointer"
+                disabled={!text || isLoading}
+            >
+                画像生成
+            </button>
+
+            {previewUrl && (
+                <div className="flex flex-col items-center justify-center p-2 text-center">
+                    <Image
+                        src={previewUrl}
+                        alt="Preview"
+                        width={300}
+                        height={300}
+                        unoptimized
+                        className="rounded shadow mt-1"
+                    />
+                </div>
+            )}
+
+            {isLoading && <Loading />}
+        </div>
+    );
+}

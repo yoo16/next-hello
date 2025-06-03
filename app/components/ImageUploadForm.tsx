@@ -29,28 +29,24 @@ export default function ImageUploadForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!file) {
-            alert('画像を選択してください。');
-            return;
-        }
+        if (!file) return;
 
         setIsLoading(true);
         setResult('');
 
+        // formDataを作成して画像を追加
         const formData = new FormData();
         formData.append('image', file);
 
+        // APIに画像を送信
         const response = await fetch('/api/whats_image', {
             method: 'POST',
             body: formData,
         });
-
+        // レスポンスを取得
         const data = await response.json();
-        if (response.ok) {
-            setResult(data.message);
-        } else {
-            setResult('エラーが発生しました。');
-        }
+        // 結果を設定
+        setResult(data.message);
 
         setIsLoading(false);
     };
