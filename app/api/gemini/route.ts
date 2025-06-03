@@ -4,15 +4,11 @@ import { NextResponse } from 'next/server';
 export async function GET() {
     const API_KEY = process.env.GEMINI_API_KEY;
 
-    // プロンプト内容
-    const prompt = 'Geminiは何食べたい？';
-
     // GoogleGenAIインスタンス生成
     const ai = new GoogleGenAI({ apiKey: API_KEY });
-    const model = 'gemini-2.0-flash';
-    const config = {
-        responseMimeType: 'text/plain',
-    };
+
+    // プロンプト内容
+    const prompt = 'Geminiは何食べたい？';
     const contents = [
         {
             role: 'user',
@@ -23,10 +19,10 @@ export async function GET() {
             ],
         },
     ];
-    // GeminiAPIにリクエストを送信
+    // GeminiAPIにリクエスト
     const response = await ai.models.generateContent({
-        model,
-        config,
+        model: 'gemini-2.0-flash',
+        config: { responseMimeType: 'text/plain' },
         contents,
     });
     // レスポンスからテキストを取得

@@ -6,7 +6,6 @@ import Image from 'next/image';
 
 export default function ImageGenerateForm() {
     const [text, setText] = useState<string>("");
-    const [message, setMessage] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState("");
 
@@ -20,7 +19,6 @@ export default function ImageGenerateForm() {
         if (!text) return;
 
         setIsLoading(true);
-        setMessage('');
 
         const response = await fetch('/api/generate_image', {
             method: 'POST',
@@ -31,19 +29,17 @@ export default function ImageGenerateForm() {
         });
         // レスポンスを取得
         const data = await response.json();
+        // console.log(data);
         // 画像のURLがあればプレビュー用に設定
         if (data.url) {
             setPreviewUrl(data.url);
         }
-        // 結果を設定
-        setMessage(data.message);
-
         setIsLoading(false);
     };
 
     return (
         <div className="mx-auto max-w-2xl p-6 bg-white rounded-lg shadow-md space-y-4">
-            <h2 className="text-2xl font-bold">画像を教えて！</h2>
+            <h2 className="text-2xl font-bold">画像を作って！</h2>
 
             <input type="text" className="p-2 border border-gray-300 rounded w-full"
                 onChange={handleChange}
@@ -67,15 +63,15 @@ export default function ImageGenerateForm() {
                         unoptimized
                         className="rounded shadow mt-1"
                     />
+                    <a
+                        href={previewUrl}
+                        download
+                        className="mt-2 inline-block px-4 py-2 bg-sky-600 text-white rounded hover:bg-green-700"
+                    >
+                        ダウンロード
+                    </a>
                 </div>
             )}
-
-            {message && (
-                <div className="mt-4 p-3 bg-gray-100 rounded shadow text-sm whitespace-pre-wrap">
-                    <div>{message}</div>
-                </div>
-            )}
-
             {isLoading && <Loading />}
         </div>
     );

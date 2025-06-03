@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     // レスポンスデータ生成
     const data = {
         message: text,
-        imageUrl: url,
+        url: url,
     };
     // レスポンス
     return NextResponse.json(data);
