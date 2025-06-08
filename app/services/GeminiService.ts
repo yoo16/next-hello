@@ -46,7 +46,7 @@ export async function whatsImage(file: File): Promise<string> {
                         data: base64,
                     },
                 },
-                { text: "添付した画像について説明して。" },
+                { text: "この写真は何？" },
             ],
         },
     ];
@@ -61,15 +61,15 @@ export async function whatsImage(file: File): Promise<string> {
     return text;
 }
 
-export async function generateImage(text: string): Promise<string> {
-    // ファイルパスとURLを生成
-    const { filePath, url } = uploadImageInfo();
+export async function generateImage(text: string) {
+    // 画像生成のためのプロンプトを作成
+    const prompt = `次のキーワードで画像生成（文字なし）\n\n${text}`;
 
     // GeminiAPIにリクエストを送信
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const response = await ai.models.generateContent({
         model: "gemini-2.0-flash-preview-image-generation",
-        contents: `次の内容の画像を生成（文字なし）\n\n${text}`,
+        contents: prompt,
         config: { 
             responseModalities: [Modality.TEXT, Modality.IMAGE]
         },
@@ -78,6 +78,9 @@ export async function generateImage(text: string): Promise<string> {
     // レスポンスから画像データを取得し、ファイルに保存
     const parts = response.candidates?.[0]?.content?.parts;
     if (!parts) return "";
+
+    // ファイルパスとURLを生成
+    const { filePath, url } = uploadImageInfo();
     for (const part of parts) {
         if (part.inlineData?.data) {
             await saveImage(filePath, part.inlineData.data);

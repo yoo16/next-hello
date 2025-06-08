@@ -81,7 +81,7 @@ export default function ImageUploadForm() {
                     />
                     <button
                         onClick={handleSubmit}
-                        className="mt-4 px-6 py-3 bg-sky-600 text-white rounded-xl shadow hover:bg-sky-700 cursor-pointer"
+                        className="mt-4 px-6 py-3 bg-sky-600 text-white rounded-xl hover:bg-sky-700 cursor-pointer"
                         disabled={!file || isLoading}
                     >
                         画像を送信
