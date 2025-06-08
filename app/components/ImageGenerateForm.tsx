@@ -3,52 +3,41 @@
 import { useState } from 'react';
 import Loading from '@/app/components/Loading';
 import Image from 'next/image';
+import KeywordInput from '@/app/components/KeywordInput';
 
 export default function ImageGenerateForm() {
-    const [text, setText] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState("");
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value);
-    };
+    const [keywords, setKeywords] = useState<string[]>([]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (!text) return;
+        if (keywords.length === 0) return;
 
         setIsLoading(true);
 
+        const text = keywords.join(', ');
         const response = await fetch('/api/generate_image', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text }),
         });
-        // レスポンスを取得
+
         const data = await response.json();
-        // console.log(data);
-        // 画像のURLがあればプレビュー用に設定
-        if (data.url) {
-            setPreviewUrl(data.url);
-        }
+        if (data.url) setPreviewUrl(data.url);
         setIsLoading(false);
     };
 
     return (
-        <div className="mx-auto max-w-2xl p-6 bg-white rounded-lg shadow-md space-y-4">
-            <h2 className="text-2xl font-bold">画像を作って！</h2>
+        <div className="mx-auto p-6 rounded-lg shadow-md space-y-4">
+            <h2 className="text-2xl font-bold">画像を教えて！</h2>
 
-            <input type="text" className="p-2 border border-gray-300 rounded w-full"
-                onChange={handleChange}
-                placeholder="生成したい画像の説明を入力してください"
-            />
+            <KeywordInput keywords={keywords} setKeywords={setKeywords} />
+
             <button
                 onClick={handleSubmit}
                 className="mt-4 px-6 py-3 bg-sky-600 text-white rounded-xl shadow hover:bg-sky-700 cursor-pointer"
-                disabled={!text || isLoading}
+                disabled={keywords.length === 0 || isLoading}
             >
                 画像生成
             </button>

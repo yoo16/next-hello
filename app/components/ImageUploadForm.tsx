@@ -52,7 +52,7 @@ export default function ImageUploadForm() {
     };
 
     return (
-        <div className="mx-auto max-w-2xl p-6 bg-white rounded-lg shadow-md space-y-4">
+        <div className="mx-auto p-6 rounded-lg shadow-md space-y-4">
             <h2 className="text-2xl font-bold">画像を教えて！</h2>
 
             <input type="file" accept="image/*" className="hidden"

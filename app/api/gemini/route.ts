@@ -1,17 +1,18 @@
 import { GoogleGenAI } from '@google/genai';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+export async function POST(req: NextRequest) {
     const API_KEY = process.env.GEMINI_API_KEY;
 
     // GoogleGenAIインスタンス生成
     const ai = new GoogleGenAI({ apiKey: API_KEY });
 
+    // JSONデータを取得してオブジェクトに変換
+    const body = await req.json();
     // プロンプト内容
-    const prompt = 'Geminiは何食べたい？';
+    const prompt = "つぎの質問を単語で答えて\n\n" + body.text;
     const contents = [
         {
-            role: 'user',
             parts: [
                 {
                     text: prompt,

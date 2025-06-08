@@ -8,7 +8,7 @@ import ImageGenerateForm from "./components/ImageGenerateForm";
 export default function Home() {
 
   return (
-    <div className="text-center space-y-6">
+    <div className="w-full max-w-2xl text-center space-y-6">
       <h1 className="text-4xl md:text-6xl font-extrabold text-gray-800">
         React & Next.js
       </h1>
