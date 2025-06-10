@@ -16,16 +16,25 @@ export default function ImageGenerateForm() {
 
         setIsLoading(true);
 
+        // キーワードをカンマ区切りの文字列に変換
         const text = keywords.join(', ');
-        const response = await fetch('/api/generate_image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text }),
-        });
-
-        const data = await response.json();
-        if (data.url) setPreviewUrl(data.url);
-        setIsLoading(false);
+        // /api/generate_image エンドポイントにPOSTリクエストを送信
+        try {
+            const response = await fetch('/api/generate_image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text }),
+            });
+            // JSONレスポンスを取得
+            const data = await response.json();
+            // 画像のURLを設定
+            if (data.url) setPreviewUrl(data.url);
+            setIsLoading(false);
+        } catch (error) {
+            console.error("Error generating image:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (

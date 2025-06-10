@@ -27,11 +27,6 @@ export async function fileToBase64(file: File): Promise<{ base64: string; mimeTy
     };
 }
 
-export async function saveImage(path: string, data: string, type: BufferEncoding = "base64") {
-    const buffer = Buffer.from(data, type);
-    await writeFile(path, buffer);
-}
-
 export function uploadImageInfo(ext = ".png"): { filePath: string; url: string } {
     // ディレクトリチェック
     ensureFile();
@@ -40,4 +35,9 @@ export function uploadImageInfo(ext = ".png"): { filePath: string; url: string }
     const filePath = join(DATA_DIR, fileName);
     const url = `/images/${fileName}`;
     return { filePath, url };
+}
+
+export async function saveImage(path: string, data: string, type: BufferEncoding = "base64") {
+    const buffer = Buffer.from(data, type);
+    await writeFile(path, buffer);
 }
