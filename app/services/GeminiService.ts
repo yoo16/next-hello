@@ -5,6 +5,7 @@ import {
 
 import { Message } from '@/app/interfaces/Message';
 import { fileToBase64, saveImage, uploadImageInfo } from '@/app/repositories/ImageRepository';
+import { saveWaveFile } from '../repositories/AudioRepository';
 
 const API_KEY = process.env.GEMINI_API_KEY;
 
@@ -70,7 +71,7 @@ export async function generateImage(text: string) {
     const response = await ai.models.generateContent({
         model: "gemini-2.0-flash-preview-image-generation",
         contents: prompt,
-        config: { 
+        config: {
             responseModalities: [Modality.TEXT, Modality.IMAGE]
         },
     });
@@ -79,7 +80,7 @@ export async function generateImage(text: string) {
     const parts = response.candidates?.[0]?.content?.parts;
     if (!parts) return "";
 
-    // ファイルパスとURLを取得し、画像ファイルをサーバ保存
+    // // ファイルパスとURLを取得し、画像ファイルをサーバ保存
     const { filePath, url } = uploadImageInfo();
     for (const part of parts) {
         if (part.inlineData?.data) {
@@ -88,4 +89,59 @@ export async function generateImage(text: string) {
         }
     }
     return "";
+}
+
+export async function generateImageForImagen(text: string) {
+    // 画像生成のためのプロンプトを作成
+    const prompt = `次のキーワードで画像生成して。画像内に文字、サイン、説明書きなどは一切含めないで。\n\nキーワード: ${text}`;
+
+    // const model = "gemini-2.0-flash-preview-image-generation";
+    // GeminiAPIにリクエストを送信
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
+    const response = await ai.models.generateImages({
+        model: 'imagen-3.0-generate-002',
+        prompt: prompt,
+        config: {
+            numberOfImages: 1,
+        },
+    });
+    console.log("Response from Gemini:", response);
+    if (!response.generatedImages || response.generatedImages.length === 0) {
+        console.error("No images generated");
+        return "";
+    }
+    const { filePath, url } = uploadImageInfo();
+    for (const generatedImage of response.generatedImages) {
+        const image = generatedImage.image?.imageBytes;
+        if (image) {
+            await saveImage(filePath, image)
+        }
+    }
+    return url;
+}
+
+export async function generateAudio() {
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+    const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash-preview-tts",
+        contents: [{ parts: [{ text: 'Say cheerfully: Have a wonderful day!' }] }],
+        config: {
+            responseModalities: ['AUDIO'],
+            speechConfig: {
+                voiceConfig: {
+                    prebuiltVoiceConfig: { voiceName: 'Kore' },
+                },
+            },
+        },
+    });
+
+    const data = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    if (!data) {
+        console.error("No audio data received from Gemini");
+        return;
+    }
+    const audioBuffer = Buffer.from(data, 'base64');
+    const fileName = 'output.wav';
+    await saveWaveFile(fileName, audioBuffer);
 }
