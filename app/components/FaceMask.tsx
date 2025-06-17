@@ -15,6 +15,7 @@ export default function MaskWithThreeJS() {
     const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const maskMeshRef = useRef<THREE.Mesh | null>(null);
+    const maskImages = [1, 2, 3, 4, 5].map(n => `${n}.png`);
 
     const [maskImage, setMaskImage] = useState('1.png');
     const [isLoading, setIsLoading] = useState(true);
@@ -130,8 +131,8 @@ export default function MaskWithThreeJS() {
                 pointerEvents: 'none',
             }} />
             <div style={{ position: 'absolute', top: height + 10 }}>
-                {[1, 2, 3, 4].map((n) => {
-                    const filename = `${n}.png`;
+                {maskImages.map((filename, n) => {
+                    // const filename = `${n}.png`;
                     return (
                         <button
                             key={n}
