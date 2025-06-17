@@ -16,8 +16,8 @@ export default function Header() {
                         <Link href="/counter" className="text-white hover:underline">Counter</Link>
                         <Link href="/profile" className="text-white hover:underline">Profile</Link>
                         <Link href="/memo" className="text-white hover:underline">Memo</Link>
+                        <Link href="/three" className="text-white hover:underline">Three</Link>
                         <Link href="/face" className="text-white hover:underline">Face</Link>
-                        <Link href="/chat" className="text-white hover:underline">Chat</Link>
                     </nav>
                 </nav>
             </div>
