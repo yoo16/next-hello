@@ -10,3 +10,12 @@ npm i
 ```bash
 npm run dev
 ```
+
+```bash
+npm install react-webcam
+```
+
+
+```bash
+npm install @vladmandic/human react-webcam
+```
