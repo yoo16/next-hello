@@ -11,17 +11,13 @@ npm i
 npm run dev
 ```
 
+## FaceAPI
 ```bash
 npm install react-webcam
+npm install three @types/three
+npm install face-api.js
 ```
-
 
 ```bash
 npm install @vladmandic/human react-webcam
-```
-
-```bash
-npm install @tensorflow-models/face-landmarks-detection 
-npm install @tensorflow/tfjs-core 
-npm install @tensorflow/tfjs-backend-webgl
 ```

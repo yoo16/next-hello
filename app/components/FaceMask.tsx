@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import Webcam from 'react-webcam';
 import * as THREE from 'three';
+import Loading from './Loading';
 
 export default function MaskWithThreeJS() {
     const webcamRef = useRef<Webcam>(null);
@@ -16,6 +17,7 @@ export default function MaskWithThreeJS() {
     const maskMeshRef = useRef<THREE.Mesh | null>(null);
 
     const [maskImage, setMaskImage] = useState('1.png');
+    const [isLoading, setIsLoading] = useState(true);
 
     const width = 760;
     const height = 600;
@@ -23,11 +25,13 @@ export default function MaskWithThreeJS() {
     const maskHeight = 600;
 
     useEffect(() => {
+        setIsLoading(true);
         const loadModels = async () => {
             await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
             await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
         };
         loadModels().then(() => initThreeScene(maskImage));
+        setIsLoading(false);
     }, []);
 
     useEffect(() => {
@@ -103,6 +107,8 @@ export default function MaskWithThreeJS() {
 
     return (
         <div style={{ position: 'relative', width, height }}>
+            {isLoading && <Loading />}
+
             <Webcam
                 ref={webcamRef}
                 audio={false}
