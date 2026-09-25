@@ -8,6 +8,10 @@ import { fileToBase64, saveImage, uploadImageInfo } from '@/app/repositories/Ima
 import { saveWaveFile } from '../repositories/AudioRepository';
 
 const API_KEY = process.env.GEMINI_API_KEY;
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+const IMAGE_MODEL = process.env.GEMINI_IMAGE_MODEL || "gemini-3.1-flash-image";
+const IMAGEN_MODEL = process.env.GEMINI_IMAGEN_MODEL || "imagen-3.0-generate-002";
+const TTS_MODEL = process.env.GEMINI_TTS_MODEL || "gemini-2.5-flash-preview-tts";
 
 export async function sendToGemini(userMessage: Message): Promise<string> {
     const prompt = `つぎの質問に答えて。\n\n${userMessage.content}`;
@@ -21,8 +25,8 @@ export async function sendToGemini(userMessage: Message): Promise<string> {
     ];
 
     const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        config: { maxOutputTokens: 1024 },
+        model: MODEL,
+        config: { maxOutputTokens: 4096 },
         contents,
     });
 
@@ -47,14 +51,14 @@ export async function whatsImage(file: File): Promise<string> {
                         data: base64,
                     },
                 },
-                { text: "この写真は何？" },
+                { text: "落とし物です。この写真の内容を説明してください。" },
             ],
         },
     ];
 
     const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        config: { maxOutputTokens: 1024 },
+        model: MODEL,
+        config: { maxOutputTokens: 4096 },
         contents,
     });
 
@@ -69,7 +73,7 @@ export async function generateImage(text: string) {
     // GeminiAPIにリクエストを送信
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash-preview-image-generation",
+        model: IMAGE_MODEL,
         contents: prompt,
         config: {
             responseModalities: [Modality.TEXT, Modality.IMAGE]
@@ -99,7 +103,7 @@ export async function generateImageForImagen(text: string) {
     // GeminiAPIにリクエストを送信
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const response = await ai.models.generateImages({
-        model: 'imagen-3.0-generate-002',
+        model: IMAGEN_MODEL,
         prompt: prompt,
         config: {
             numberOfImages: 1,
@@ -124,7 +128,7 @@ export async function generateAudio() {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-preview-tts",
+        model: TTS_MODEL,
         contents: [{ parts: [{ text: 'Say cheerfully: Have a wonderful day!' }] }],
         config: {
             responseModalities: ['AUDIO'],

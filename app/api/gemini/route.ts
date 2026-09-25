@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
     const API_KEY = process.env.GEMINI_API_KEY;
+    const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 
     // GoogleGenAIインスタンス生成
     const ai = new GoogleGenAI({ apiKey: API_KEY });
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
     ];
     // GeminiAPIにリクエスト
     const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: MODEL,
         config: { responseMimeType: 'text/plain' },
         contents,
     });

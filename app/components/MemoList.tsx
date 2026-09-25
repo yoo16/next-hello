@@ -2,7 +2,7 @@
 
 // reactの useState, FormEvent をインポート
 import { useState, FormEvent, useEffect } from "react";
-import { addMemo, loadMemos, removeMemo } from "@/app/services/MemoService";
+import { addMemo, loadMemos, removeMemo } from "@/app/services/memoService";
 
 export default function MemoList() {
     // textの値を管理するステート変数
